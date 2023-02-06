@@ -1,6 +1,5 @@
 // Got Bored
 // Code graphing circles representing the Fourier Series Expansion of a periodic heaviside function. 
-// By Matthieu Boyer
 
 
 let theta = 0;
