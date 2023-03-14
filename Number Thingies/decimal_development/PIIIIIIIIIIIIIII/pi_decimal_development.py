@@ -181,6 +181,14 @@ def chudnovsky_bs_pi_decimal_development_with_gmpy2(digits, base10log = False, s
     return pi, duration
 
 
+def counter(n : int) -> tuple(dict[int, float], float):
+    freq_dict ={}
+    pi, duration = chudnovsky_bs_pi_decimal_development_with_gmpy2(n, False, False)
+    for digit in pi:
+        freq_dict[int(digit)] = freq_dict.get(int(digiti), 0) + 1/n
+    return freq_dict, duration
+    
+
 durations = []
 durations_gmpy = []
 number = 10**6
