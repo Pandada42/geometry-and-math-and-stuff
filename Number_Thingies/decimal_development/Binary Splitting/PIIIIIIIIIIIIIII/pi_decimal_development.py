@@ -181,46 +181,47 @@ def chudnovsky_bs_pi_decimal_development_with_gmpy2(digits, base10log = False, s
     return pi, duration
 
 
-def counter(n : int) -> tuple(dict[int, float], float):
+def counter(n : int) -> tuple[dict[int, float], float]:
     freq_dict ={}
     pi, duration = chudnovsky_bs_pi_decimal_development_with_gmpy2(n, False, False)
-    for digit in pi:
-        freq_dict[int(digit)] = freq_dict.get(int(digiti), 0) + 1/n
+    for digit in str(pi):
+        freq_dict[int(digit)] = freq_dict.get(int(digit), 0) + 1/n
     return freq_dict, duration
-    
 
-durations = []
-durations_gmpy = []
-number = 10**6
-N = []
-for i in range(0, number + 1, 10000):
-    print(i)
-    N.append(i)
-    # durations.append(chudnovsky_bs_pi_decimal_development(i, False, False)[1])
-    durations_gmpy.append(chudnovsky_bs_pi_decimal_development_with_gmpy2(i, False, False)[1])
 
-plt.clf()
-# plt.plot(N, durations, 'r', label = 'Newton-Raphson Sqrt Method')
-plt.plot(N, durations_gmpy, 'b', label = 'Fast GMPY2 C Sqrt')
-plt.legend()
-plt.xlabel('Number of decimals calculated')
-plt.ylabel('Calculation Time')
-plt.savefig('pi_decimal_development_calctime_comparison.png')
+def graph():
+    durations = []
+    durations_gmpy = []
+    number = 10**6
+    N = []
+    for i in range(0, number + 1, 10000):
+        print(i)
+        N.append(i)
+        durations.append(chudnovsky_bs_pi_decimal_development(i, False, False)[1])
+        durations_gmpy.append(chudnovsky_bs_pi_decimal_development_with_gmpy2(i, False, False)[1])
 
-"""
-number = 9
-durations = []
-N = []
-for i in range(number):
-    print(i)
-    N.append(i)
-    durations.append(chudnovsky_bs_pi_decimal_development_with_gmpy2(i, True, False)[1])
+    plt.clf()
+    plt.plot(N, durations, 'r', label = 'Newton-Raphson Sqrt Method')
+    plt.plot(N, durations_gmpy, 'b', label = 'Fast GMPY2 C Sqrt')
+    plt.legend()
+    plt.xlabel('Number of decimals calculated')
+    plt.ylabel('Calculation Time')
+    plt.savefig('pi_decimal_development_calctime_comparison.png')
 
-plt.clf()
-plt.plot(N, durations, 'r', label = 'Binary Splitting with GMPY2 Library')
-plt.legend()
-plt.xlabel('Number of decimals calculated')
-plt.ylabel('Calculation Time')
-plt.savefig('pi_decimal_development_calctime_gmpy2.png')
+    number = 9
+    durations = []
+    N = []
+    for i in range(number):
+        print(i)
+        N.append(i)
+        durations.append(chudnovsky_bs_pi_decimal_development_with_gmpy2(i, True, False)[1])
 
-"""
+    plt.clf()
+    plt.plot(N, durations, 'r', label = 'Binary Splitting with GMPY2 Library')
+    plt.legend()
+    plt.xlabel('Number of decimals calculated')
+    plt.ylabel('Calculation Time')
+    plt.savefig('pi_decimal_development_calctime_gmpy2.png')
+
+
+
