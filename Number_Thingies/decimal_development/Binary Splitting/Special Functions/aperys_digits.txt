@@ -1,0 +1,4 @@
+Apery's Constant's first 100 digits are : 
+1.2025909515797972
+ 
+Computed in 0.0s

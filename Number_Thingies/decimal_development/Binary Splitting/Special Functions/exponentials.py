@@ -62,14 +62,12 @@ def exponential(digits, base10log = False, save = True):
         except :
             text = ["a b 0 2"]
 
-        first_line = text[0].split(" ")
-        if int(first_line[3]) <= digits :
-            with open("eulers_digits.txt", "w") as f :
-                str_aperys = str(eulers)
-                aperys_string = str_aperys
-                f.write(f"Euler's Constant's first {digits} digits are : \n" + aperys_string)
-                f.write("\n \n")
-                f.write(f"Computed in {duration}s")
+        with open("eulers_digits.txt", "w") as f :
+            str_aperys = str(eulers)
+            aperys_string = str_aperys
+            f.write(f"Euler's Constant's first {digits} digits are : \n" + aperys_string)
+            f.write("\n \n")
+            f.write(f"Computed in {duration}s")
 
     return eulers, duration
 
