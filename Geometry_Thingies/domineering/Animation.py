@@ -59,13 +59,16 @@ class Domineering(Scene) :
                 self.wait(0.2)
 
         if gagnant < 0 :
-            couleur_gagnant = "Violet"
+            couleur_gagnante = "Violet"
             couleur = PURPLE
         else :
-            couleur_gagnant = "Vert"
+            couleur_gagnante = "Vert"
             couleur = GREEN_D
-        resultat = Text(f"Le Joueur {couleur_gagnant} a gagné", stroke_color = BLACK, stroke_width = 0.5, stroke_opacity = 0.9, color = couleur, opacity = 1)
+        resultat = Text(f"Le Joueur {couleur_gagnante} a gagné", stroke_color = BLACK, stroke_width = 0.5, stroke_opacity = 0.9, color = couleur, opacity = 1)
         rect = Rectangle(width = 4 * size, height = size).set_fill(LIGHT_GRAY, opacity = 1)
         self.play(Create(rect))
         self.play(Write(resultat))
         self.wait(2)
+        self.clear()
+
+

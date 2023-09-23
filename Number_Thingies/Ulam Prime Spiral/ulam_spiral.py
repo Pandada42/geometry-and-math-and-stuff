@@ -1,16 +1,15 @@
 import matplotlib.pyplot as plt
-import numpy
+from manim import *
 
 
-width = 500
-height = 500
-limit_number = 25
-step_size = width/limit_number
-step_counter = 1
+p, q = -10, -10
 
 
-
-
+class number_spiral(Scene):
+	def construct(self):
+		start_row = p
+		start_column = q
+		self.
 
 
 

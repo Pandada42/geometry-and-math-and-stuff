@@ -4,8 +4,9 @@ import time
 import gmpy2
 from gmpy2 import mpz
 import dill
-
+import re
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def newton_raphson_sqrt(n, one) :
@@ -186,7 +187,8 @@ def counter(n : int) -> tuple[dict[int, float], float]:
     pi, duration = chudnovsky_bs_pi_decimal_development_with_gmpy2(n, False, False)
     for digit in str(pi):
         freq_dict[int(digit)] = freq_dict.get(int(digit), 0) + 1/n
-    return freq_dict, duration
+    string_ret = str(pi) + "\n" + str(freq_dict) + "\nTemps de Calcul : " + str(duration)
+    return string_ret
 
 
 def graph():

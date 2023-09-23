@@ -1,75 +1,85 @@
-import math
-import time
-
 import numpy as np
+from Number_Thingies.number_thingies_main import *
 
 
-def exponential(digits, base10log = False, save = True):
-    start = time.time()
+def exp_matrix_mul_iter(x, n):
 
-    def bs_computing(a, b) :
-        """
-        :param a: lower bound considered
-        :type a: int
-        :param b: upper bound considered
-        :type b: int
-        :return: computes the terms for binary splitting the Chudnovsky Infinite Series. (see wikipedia for the series)
-        Formulas for Binary Splitting are as follows :
-        a(a) = +/- (13591409 + 545140134*a)
-        p(a) = (6*a-5)*(2*a-1)*(6*a-1)
-        b(a) = 1
-        q(a) = a*a*a*C3over24
+	def M(x, k) :
+		"""
+		:param x: Argument in the exponential, any element from an algebra (see below)
+		:type x:
+		:param k: Element used in the recursive formula
+		:type k: int
+		:return: Matrix used to compute the next element of the recursion
+		:rtype: numpy matrix
+		"""
+		res = np.matrix([[x / (k + 1), 0], [1, 1]])
+		return res
 
-        Notations and computation taken from https://www.ginac.de/CLN/binsplit.pdf
-        :rtype: int
-        """
-        if b - a == 1 :
-            if a == 0 :
-                Pab = Qab = 1
-            else :
-                Qab = b
-                Pab = 1
+	cur = np.matrix([1, 0]).transpose()
+	for k in range(n):
+		cur = np.matmul(M(x, k), cur)
 
-        else :
-            m = (a + b) // 2
-            Pam, Qam = bs_computing(a, m)
-            Pmb, Qmb = bs_computing(m, b)
-            Qab = Qam * Qmb
-            Pab = Pam * Qmb + Pmb
-        return Pab, Qab
-
-    def number_of_terms(number):
-        n = 1
-        k = 0
-        while k < number :
-            n += 1
-            k += np.log10(n)
-        return n
-
-    if base10log :
-        digits = 10 ** digits
-    n = number_of_terms(digits)
-    P, Q = bs_computing(0, n)
-    eulers = 1 + P/Q
-
-    end = time.time()
-    duration = end - start
-
-    if save :
-        try :
-            with open("eulers_digits.txt", "r") as f :
-                text = f.readlines()
-        except :
-            text = ["a b 0 2"]
-
-        with open("eulers_digits.txt", "w") as f :
-            str_aperys = str(eulers)
-            aperys_string = str_aperys
-            f.write(f"Euler's Constant's first {digits} digits are : \n" + aperys_string)
-            f.write("\n \n")
-            f.write(f"Computed in {duration}s")
-
-    return eulers, duration
+	return cur[1, 0]
 
 
-exponential(3, True, True)
+def exp_matrix_mul_bs(x, n) :
+
+	def M(x, k) :
+		"""
+		:param x: Argument in the exponential, any element from an algebra (see below)
+		:type x:
+		:param k: Element used in the recursive formula
+		:type k: int
+		:return: Matrix used to compute the next element of the recursion
+		:rtype: numpy matrix
+		"""
+		res = np.matrix([[x / (k + 1), 0], [1, 1]])
+		return res
+
+	cur = np.matrix([1, 0]).transpose()
+	for k in range(n) :
+		cur = np.matmul(M(x, k), cur)
+
+	return cur[1, 0]
+
+# Need to run the calculations to find a linear recurrence relation and apply binary splitting
+
+
+def exp_bs_rational(x, n):
+	"""
+
+	:param x: rational value at which to compute the exponential
+	:type x: tuple[int, int]
+	:param n: Number of bits of precision i.e. precision is O(2^-n)
+	:type n: int
+	:return: exp(x) at 2^-n precision
+	:rtype: float
+	"""
+	u, v = simplify(x)
+
+	def bs_computing(a, b):
+		if b - a == 1 :
+			if a == 0 :
+				Pab = Qab = 1
+			else :
+				Pab = u
+				Qab = a * v
+			Tab = Pab
+
+		else :
+			m = (a + b) // 2
+			Pam, Qam, Tam = bs_computing(a, m)
+			Pmb, Qmb, Tmb = bs_computing(m, b)
+			Pab = Pam * Pmb
+			Qab = Qam * Qmb
+			Tab = Pam * Tmb + Tam * Qmb
+		return Pab, Qab, Tab
+
+
+	# Need to compute the number of terms that are to be added
+	# Here n_max = O(N/(log(N) - log(|x|)) :
+
+	n_max = n/(log_bs_int(n) - log_bs_rational(*x))
+	P, Q, T = bs_computing(0, n_max)
+	return T/Q
